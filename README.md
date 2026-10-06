@@ -1,0 +1,2 @@
+# samplescriptku
+Hanya Contoh Sample 
